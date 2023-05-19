@@ -12,3 +12,8 @@ $theme-colors: (
 );
  
 @import "node_modules/bootstrap/scss/bootstrap.scss";
+
+
+.pointer {
+  cursor: pointer;
+}
