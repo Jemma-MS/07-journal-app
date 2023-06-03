@@ -46,7 +46,7 @@ export default {
         },
         yearDay() {
             const date = new Date( this.entry.date )
-            return `${ date.getFullYear() }, ${ days[date.getDate() ] }`
+            return `${ date.getFullYear() }, ${ days[ date.getDay() ] }`
         }
     }
 
