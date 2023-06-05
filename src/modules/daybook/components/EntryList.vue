@@ -4,7 +4,7 @@
         <input 
             type="text"
             class="form-control"
-            placeholder="Buscar entradas"
+            placeholder="Buscar entrada"
             v-model="term"
         />
     </div>
@@ -15,7 +15,7 @@
             :key="entry.id"
             :entry="entry"
         />
-    </div>
+      </div>
 
   </div>
 </template>
