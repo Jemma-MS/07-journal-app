@@ -22,6 +22,12 @@ export const updateEntry = ( state, entry ) => { // entry actualizada
 
 }
 
-export const addEntry = ( /*state*/ ) => {
+export const addEntry = ( state, entry ) => {
+
+    //state -> entries -> la nueva entrada debe de ser la primera
+    state.entries = [ entry, ...state.entries ]
+
+
+
 
 }
