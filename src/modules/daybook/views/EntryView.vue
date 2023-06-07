@@ -1,5 +1,4 @@
-<template>
-    
+<template>    
     <template v-if="entry">
         <div
             class="entry-title d-flex justify-content-between p-2">
@@ -11,7 +10,15 @@
             </div>
 
             <div>
-                <button class="btn btn-danger mx-2">
+
+                <input type="file">
+
+
+
+                <button 
+                    v-if="entry.id"
+                    class="btn btn-danger mx-2"
+                    @click="onDeleteEntry">
                     Borrar
                     <i class="fa fa-trash-alt"></i>
                 </button>
@@ -52,6 +59,7 @@
 
 import { defineAsyncComponent } from 'vue';
 import { mapGetters, mapActions } from 'vuex';
+import Swal from 'sweetalert2'
 
 import getDayMonthYear from '../helpers/getDayMonthYear';
 
@@ -91,7 +99,7 @@ export default {
     }, 
     methods:{
         
-        ...mapActions('journal', ['updateEntry', 'createEntry']),
+        ...mapActions('journal', ['updateEntry', 'createEntry','deleteEntry']),
 
         loadEntry() {
             
@@ -113,6 +121,14 @@ export default {
         },
 
         async saveEntry() {
+
+            new Swal({
+                title: 'Espere por favor',
+                allowOutsideClick: false
+            })
+            Swal.showLoading()
+
+
             if( this.entry.id ) {
                 //Actulizar
                 await this.updateEntry( this.entry )
@@ -124,10 +140,36 @@ export default {
                 
             }
 
-            //acción del journal Module
-            this.updateEntry( this.entry )
+            Swal.fire('Guardado', 'Entrada registrada con éxito', 'success')
+                      
+        },
+
+        async onDeleteEntry() {
+
+            const { isConfirmed }= await Swal.fire({
+                title: 'Esta segurx?',
+                text: 'Una vez borrado no se puede recuperar',
+                showDenyButton: true,
+                confirmButtonText: 'Si estoy segurx'
+            })
+
+            if( isConfirmed ) {
+                new Swal({
+                    title: 'Espere por favor',
+                    allowOutsideClick: false
+                })
+                Swal.showLoading(),
+                await this.deleteEntry( this.entry.id )
+                this.$router.push({ name: 'no-entry' })
+
+                Swal.fire('Eliminado', '', 'success')
+            }
+
             
+           
         }
+
+       
     },
     created() {
         //console.log( this.id )
