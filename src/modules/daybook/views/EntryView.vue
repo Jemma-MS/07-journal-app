@@ -13,8 +13,6 @@
 
                 <input type="file">
 
-
-
                 <button 
                     v-if="entry.id"
                     class="btn btn-danger mx-2"
