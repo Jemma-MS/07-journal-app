@@ -11,7 +11,12 @@
 
             <div>
 
-                <input type="file">
+                <input type="file"
+                    @change="onSelectedImage"
+                    ref="imageSelector"
+                    v-show="false"
+                    accept="image/png, image/jpeg, image/jpg"
+                    >
 
                 <button 
                     v-if="entry.id"
@@ -21,7 +26,8 @@
                     <i class="fa fa-trash-alt"></i>
                 </button>
 
-                <button class="btn btn-primary">
+                <button class="btn btn-primary"
+                    @click="onSelectImage">
                     Subir Foto
                     <i class="fa fa-upload"></i>
                 </button>
@@ -35,11 +41,18 @@
                 placeholder="Que sucedio hoy?"
             ></textarea>
         </div>
-        <img 
+        <!-- <img 
             src="https://i.pinimg.com/564x/68/0a/d7/680ad7d48c42dc474131d03ebd932eee.jpg" 
             alt="entry-picture"
             class="img-thumbnail"
-        >
+        > -->
+
+        <img 
+            v-if="localImage"
+            :src="localImage" 
+            alt="entry-picture"
+            class="img-thumbnail">
+            
     </template>
   
   <Fab 
@@ -47,7 +60,6 @@
     @on:click="saveEntry"
   />
 
-  x
 
 
 
@@ -74,7 +86,9 @@ export default {
 
     data() {
         return {
-            entry: null
+            entry: null,
+            localImage: null,
+            file: null
         }
     },
 
@@ -161,12 +175,28 @@ export default {
                 this.$router.push({ name: 'no-entry' })
 
                 Swal.fire('Eliminado', '', 'success')
+            }          
+           
+        },
+
+        onSelectedImage( event ) {
+            const file = event.target.files[0]
+            if ( !file ) {
+                this.localImage = null
+                this.file = null
+                return
             }
 
-            
-           
-        }
+            this.file = file
 
+            const fr = new FileReader()
+            fr.onload = () => this.localImage = fr.result
+            fr.readAsDataURL( file )
+
+        },
+        onSelectImage() {
+            this.$refs.imageSelector.click()
+        }
        
     },
     created() {
