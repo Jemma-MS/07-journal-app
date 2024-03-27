@@ -41,11 +41,11 @@
                 placeholder="Que sucedio hoy?"
             ></textarea>
         </div>
-        <!-- <img 
-            src="https://i.pinimg.com/564x/68/0a/d7/680ad7d48c42dc474131d03ebd932eee.jpg" 
+        <img v-if="entry.picture && !localImage"
+            :src="entry.picture"
             alt="entry-picture"
             class="img-thumbnail"
-        > -->
+        >
 
         <img 
             v-if="localImage"
@@ -72,6 +72,8 @@ import { mapGetters, mapActions } from 'vuex';
 import Swal from 'sweetalert2'
 
 import getDayMonthYear from '../helpers/getDayMonthYear';
+import uploadImage from '../helpers/uploadImage';
+
 
 export default {
     props: {
@@ -140,6 +142,10 @@ export default {
             })
             Swal.showLoading()
 
+            // se llama al metodo encargado de cargar la imagen
+            const picture = await uploadImage( this.file )
+
+            this.entry.picture = picture
 
             if( this.entry.id ) {
                 //Actulizar
@@ -152,8 +158,9 @@ export default {
                 
             }
 
+            this.file  = null
             Swal.fire('Guardado', 'Entrada registrada con éxito', 'success')
-                      
+            
         },
 
         async onDeleteEntry() {
